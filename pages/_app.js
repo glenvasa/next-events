@@ -1,8 +1,14 @@
+import Head from 'next/head'
+
 import '../styles/globals.css'
 import Layout from '../components/layout/layout'
 
 function MyApp({ Component, pageProps }) {
   return <Layout>
+    {/* use to inject meta data into head element across all pages */}
+    <Head>
+      <meta name='viewport' content='initial-scale=1.0, width=device-width' />
+    </Head>
      <Component {...pageProps} />
   </Layout>
  
