@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import Head from 'next/head'
 
 import { getFilteredEvents } from "../../helpers/api-util";
 import EventList from "../../components/events/event-list";
@@ -97,6 +98,10 @@ function FilteredEventsPage(props) {
 
   return (
     <Fragment>
+      <Head>
+            <title>Filtered Events</title>
+            <meta name="description" content={`All events for ${numMonth}/${numYear}`}/>
+        </Head>
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
@@ -107,6 +112,7 @@ function FilteredEventsPage(props) {
 // some of the pages would be difficult to choose; also pregenerating all
 // of the pages would be too much. Therefore, rendering the page on the fly
 // with getServerSideProps is probably the best option
+
 // export async function getServerSideProps(context) {
 //   const { params } = context;
 
