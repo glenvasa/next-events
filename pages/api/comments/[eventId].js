@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import {getAllDocuments} from '../../../helpers/db-util'
 
 async function handler(req, res) {
   const eventId = req.query.eventId;
@@ -51,7 +52,16 @@ async function handler(req, res) {
     // will get us all documents in comments collection and covert to array
     // which is the format we need to map them in comments-list component
     // sort will sort mongodb's created _id in decending order so that newest comment returned first
-    const documents = await db.collection("comments").find().sort({ _id: -1}).toArray();
+    // const documents = await db.collection("comments").find().sort({ _id: -1}).toArray();
+
+    // changing how we call getAllDocuments to only get comments for a specific event
+    // importing getAllDocuments from helper db-util.js 
+    const documents = await getAllDocuments(
+        client,
+        'comments',
+        { _id: -1},
+        {eventId: eventId}
+    )
 
     res.status(200).json( {comments: documents});
   }
