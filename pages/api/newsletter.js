@@ -10,12 +10,12 @@ async function handler(req, res) {
     }
 
     const client = await MongoClient.connect(
-      "mongodb+srv://next-events:next-events@cluster0.oturw.mongodb.net/newsletter?retryWrites=true&w=majority"
+      "mongodb+srv://next-events:next-events@cluster0.oturw.mongodb.net/events?retryWrites=true&w=majority"
     );
     
     const db = client.db();
 
-    await db.collection("emails").insertOne({
+    await db.collection("newsletter").insertOne({
       email: userEmail
     });
 
