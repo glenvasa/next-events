@@ -1,5 +1,11 @@
-function handler(req, res){
+import {MongoClient} from 'mongodb'
+
+async function handler(req, res){
     const eventId = req.query.eventId
+
+    const client = await MongoClient.connect(
+        "mongodb+srv://next-events:next-events@cluster0.oturw.mongodb.net/events?retryWrites=true&w=majority"
+      );
     
     if (req.method === 'POST') {
         // server-side validation
@@ -12,13 +18,23 @@ function handler(req, res){
 
   
       const newComment = {
-          id: new Date().toISOString(),
           email, 
           name, 
-          text
+          text,
+          eventId
       }   
-       
-      console.log(newComment);
+
+      const db = client.db()
+      
+      const result = await db.collection('comments').insertOne(newComment)
+      
+      console.log(result);
+
+    // this code would add the MongoDb auto created id to the newComment object we send back
+    // front end with 201 code below.
+    // However, it looks like MongoDb automatically added it to the result object it returned so I will leave out this code for now
+    //   newComment.id = result.insertedId
+
       res.status(201).json({message: 'New comment created', comment: newComment})
     }
 
@@ -31,7 +47,7 @@ function handler(req, res){
         res.status(200).json({comments: dummyList})
     }
 
-    
+    client.close()
 }
 
 export default handler
