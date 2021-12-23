@@ -1,12 +1,14 @@
 import { createContext, useState, useEffect } from 'react';
 
 const NotificationContext = createContext({
-  notification: null, // { title, message, status }
+  // initialization object, just dummy data
+  notification: null, // null initailly, but eventually will be { title, message, status }
   showNotification: function (notificationData) {},
   hideNotification: function () {},
 });
 
 export function NotificationContextProvider(props) {
+  // use to manage state that is distributed to the various stakeholders/components
   const [activeNotification, setActiveNotification] = useState();
 
   useEffect(() => {
@@ -19,6 +21,8 @@ export function NotificationContextProvider(props) {
         setActiveNotification(null);
       }, 3000);
 
+      // we don't want to have multiple timers at the same time if useEffect runs
+      // again before 3 seconds, so we return the cleanup fn to clearTimeout
       return () => {
         clearTimeout(timer);
       };
